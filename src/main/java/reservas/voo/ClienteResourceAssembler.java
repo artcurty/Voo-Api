@@ -15,5 +15,6 @@ public class ClienteResourceAssembler implements ResourceAssembler<Cliente,Resou
         return new Resource<>(cliente,
                 linkTo(methodOn(ClienteController.class).oneVooCliente(cliente.getVoo().getId(),cliente.getId())).withSelfRel(),
                 linkTo(methodOn(ClienteController.class).allVooClientes(cliente.getVoo().getId())).withRel("Voos Clientes"));
+
     }
 }

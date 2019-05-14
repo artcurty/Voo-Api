@@ -12,4 +12,5 @@ interface VooRepository extends JpaRepository<Voo,Long>{
     List<Voo> vooByOrigem(String origem);
 
     Voo vooById_Comp_id (long id_voo , long id_comp);
+
 }

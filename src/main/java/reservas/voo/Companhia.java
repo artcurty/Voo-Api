@@ -1,12 +1,10 @@
 package reservas.voo;
 
 
-import lombok.Data;
 import javax.persistence.*;
 import java.util.List;
 
 
-@Data
 @Entity
 public class Companhia {
 
@@ -23,7 +21,29 @@ public class Companhia {
         this.code = code;
     }
 
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
     public String getCode() {
         return code;
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
 }
