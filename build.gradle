@@ -13,6 +13,12 @@ configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
 	}
+
+	developmentOnly
+	runtimeClasspath {
+		extendsFrom developmentOnly
+	}
+
 }
 
 repositories {
@@ -21,6 +27,7 @@ repositories {
 dependencies {
 	implementation 'com.github.javafaker:javafaker:0.17.2'
 	compile("org.springframework.boot:spring-boot-devtools")
+	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	compile('javax.xml.bind:jaxb-api:2.3.0')
 	compile('javax.activation:activation:1.1')
 	compile('org.glassfish.jaxb:jaxb-runtime:2.3.0')

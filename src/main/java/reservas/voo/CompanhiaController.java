@@ -1,5 +1,6 @@
 package reservas.voo;
 
+import org.hibernate.ResourceClosedException;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.ResponseEntity;
@@ -18,22 +19,31 @@ import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 public class CompanhiaController {
 
         private final CompanhiaRepository Comp_repository;
+        private final CompanhiaResouceAssembler Comp_assembler;
 
-        CompanhiaController(CompanhiaRepository Comp_repository){
+        CompanhiaController(CompanhiaRepository Comp_repository,CompanhiaResouceAssembler Comp_assembler){
             this.Comp_repository = Comp_repository;
+            this.Comp_assembler = Comp_assembler;
         }
 
         @GetMapping(value = "/companhias",produces = "application/json; charset=UTF-8")
-        public List<Companhia> AllCompanhias(){
+        public Resources<Resource<Companhia>> AllCompanhias(){
 
-                List<Companhia> Cp = Comp_repository.findAll();
+            List<Resource<Companhia>> companhias = Comp_repository.findAll().stream()
+                .map(companhia -> new Resource<>(companhia,
+                linkTo(methodOn(CompanhiaController.class).one(companhia.getId())).withSelfRel(),
+                linkTo(methodOn(CompanhiaController.class).AllCompanhias()).withRel("Companhias"))).collect(Collectors.toList());
 
-            return Cp;
+            return new Resources<>(companhias,linkTo(methodOn(CompanhiaController.class).AllCompanhias()).withSelfRel());
+
         }
 
+
         @GetMapping(value = "/companhias/{id_companhia}",produces = "application/json; charset=UTF-8")
-        public Companhia one(@PathVariable Long id_companhia){
-            return Comp_repository.findById(id_companhia).orElseThrow(()-> new NotFoundException(id_companhia));
+        public Resource<Companhia> one(@PathVariable Long id_companhia){
+            Companhia companhia = Comp_repository.findById(id_companhia).orElseThrow(()-> new CompanhiaNotFoundException(id_companhia));
+
+            return Comp_assembler.toResource(companhia);
         }
 
 }
