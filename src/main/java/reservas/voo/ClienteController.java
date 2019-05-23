@@ -1,5 +1,6 @@
 package reservas.voo;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 import org.springframework.http.ResponseEntity;
@@ -45,19 +46,38 @@ public class ClienteController
 
             return Cl_Assembler.toResource(cliente);
         }
-/*
-        @GetMapping(value = "voos/{id_voo}/clientes",produces = "application/json; charset=UTF-8")
-        public Resources<Resource<Cliente>> allClienteByVoo(@PathVariable Long id_voo)
+
+        @GetMapping(value = "voos/{Voo_Id}/clientes",produces = "application/json; charset=UTF-8")
+        public Resources<Resource<Cliente>> allClienteByVoo(@PathVariable Long Voo_Id)
         {
-                List<Cliente> clientes = Cl_repository.clientesByVoo_id(id_voo);
+                List<Cliente> clientes = Cl_repository.findClientesByVoo_Id(Voo_Id);
                 List<Resource<Cliente>> Cliente_resource;
 
                 Cliente_resource = clientes.stream().map(Cl_Assembler::toResource).collect(Collectors.toList());
 
-                return new Resources<>(Cliente_resource, linkTo(methodOn(ClienteController.class).allClienteByVoo(id_voo)).withSelfRel());
+                return new Resources<>(Cliente_resource, linkTo(methodOn(ClienteController.class).allClienteByVoo(Voo_Id)).withSelfRel());
 
         }
-*/
+
+        @GetMapping(value = "/voos/{Voo_Id}/clientes/{Cliente_Id}",produces = "application/json; charset=UTF-8")
+        public Resource<Cliente> ClienteByIdAndVoo_Id(@PathVariable("Cliente_Id") Long Cliente_Id,@PathVariable("Voo_Id") Long Voo_Id)
+        {
+            Cliente cliente = Cl_repository.findClienteByIdAndVoo_Id(Cliente_Id, Voo_Id);
+
+            return Cl_Assembler.toResource(cliente);
+        }
+
+        @PostMapping(value = "/voos/{Voo_Id}",produces = "application/json; charset=UTF-8")
+        ResponseEntity<?> novoCliente(@RequestBody Cliente novoCliente, @PathVariable long Voo_Id) throws URISyntaxException{
+
+            Voo voo = V_repository.findById(Voo_Id).orElseThrow(() -> new VooNotFoundException(Voo_Id));
+
+            novoCliente.setVoo(voo);
+
+            Resource<Cliente> resource = Cl_Assembler.toResource(Cl_repository.save(novoCliente));
+
+            return ResponseEntity.created(new URI(resource.getId().expand().getHref())).body(resource);
+        }
 
 }
 

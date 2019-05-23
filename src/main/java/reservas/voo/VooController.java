@@ -4,6 +4,7 @@ import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -25,21 +26,47 @@ public class VooController {
         }
 
         @GetMapping(value = "/voos",produces = "application/json; charset=UTF-8")
-        public Resources<Resource<Voo>> AllVoo(){
+        public Resources<Resource<Voo>> AllVoos(@RequestParam (value = "Origem",defaultValue = "All") String Origem,
+                                                @RequestParam (value = "Destino",defaultValue = "All") String Destino){
 
-            List<Resource<Voo>> voos = V_repository.findAll().stream()
-                    .map(voo -> new Resource<>(voo,linkTo(methodOn(VooController.class).one(voo.getId())).withSelfRel(),
-                                                   linkTo(methodOn(VooController.class).AllVoo()).withRel("Voos"))).collect(Collectors.toList());
+            List<Voo> voos;
+            List<Resource<Voo>> Voo_resource;
 
-            return new Resources<>(voos,linkTo(methodOn(VooController.class).AllVoo()).withSelfRel());
+            if(Origem.equals("All")){
+
+                voos = V_repository.findVoosByOrigem(Origem);
+            }else if(Destino.equals("All")){
+                voos = V_repository.findVoosByDestino(Destino);
+            }
+
+            Voo_resource = voos.stream().map(V_assembler::toResource).collect(Collectors.toList());
+
+            return new Resources<>(Voo_resource,linkTo(methodOn(VooController.class).AllVoos(Origem,Destino)).withSelfRel());
 
         }
 
         @GetMapping(value = "/voos/{id_voo}",produces = "application/json; charset=UTF-8")
-        public Resource<Voo> one(@PathVariable Long id_voo){
+        public Resource<Voo> one(@PathVariable Long Voo_Id){
 
-            Voo voo = V_repository.findById(id_voo).orElseThrow(()-> new VooNotFoundException(id_voo));
+            Voo voo = V_repository.findById(Voo_Id).orElseThrow(()-> new VooNotFoundException(Voo_Id));
 
             return V_assembler.toResource(voo);
         }
+
+        @GetMapping(value = "/companhias/{Companhia_Id}/voos",produces = "application/json; charset=UTF-8")
+        public  Resources<Resource<Voo>> AllVooByCompanhia(@PathVariable Long Companhia_Id){
+
+            List<Voo> voos = V_repository.findVoosByCompanhia_Id(Companhia_Id);
+            List<Resource<Voo>> Voo_Resource;
+
+            Voo_Resource = voos.stream().map(V_assembler::toResource).collect(Collectors.toList());
+
+            return new Resources<>(Voo_Resource, linkTo(methodOn(ClienteController.class).allClienteByVoo(Companhia_Id)).withSelfRel());
+
+        }
+
+
+
+
+
 }

@@ -45,5 +45,4 @@ public class CompanhiaController {
 
             return Comp_assembler.toResource(companhia);
         }
-
 }
