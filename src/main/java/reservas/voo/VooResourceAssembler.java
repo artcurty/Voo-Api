@@ -11,7 +11,7 @@ class VooResourceAssembler implements ResourceAssembler<Voo,Resource<Voo>> {
     @Override
     public Resource<Voo> toResource(Voo voo){
         return new Resource<>(voo,linkTo(methodOn(VooController.class).one(voo.getId())).withSelfRel(),
-                linkTo(methodOn(VooController.class).AllVoos("All","All")).withRel("Voos"));
+                linkTo(methodOn(VooController.class).AllVoos()).withRel("Voos"));
     }
 
 }

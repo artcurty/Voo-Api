@@ -17,7 +17,7 @@ public class Voo {
     private String dia;
     private String horario;
     private int num_vagas;
-
+    private int vaga_ocupada;
     @ManyToOne
     Companhia companhia;
 
@@ -25,7 +25,7 @@ public class Voo {
 
     }
 
-    public Voo(String origem,float valor,String destino,String dia,String horario, int num_vagas, Companhia companhia ) {
+    public Voo(String origem,float valor,String destino,String dia,String horario, int num_vagas ,int vaga_ocupada, Companhia companhia ) {
         this.nome = nome;
         this.origem = origem;
         this.valor = valor ;
@@ -33,6 +33,7 @@ public class Voo {
         this.dia = dia;
         this.horario = horario;
         this.num_vagas = num_vagas;
+        this.vaga_ocupada = vaga_ocupada;
         this.companhia = companhia;
 
         this.nome = this.companhia.getCode() + origem.substring(0,2) + destino.substring(0,2) + dia.substring(0,2).toUpperCase() + horario.substring(0,2);
@@ -75,6 +76,7 @@ public class Voo {
         return companhia;
     }
 
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -109,6 +111,15 @@ public class Voo {
 
     public void setCompanhia(Companhia companhia) {
         this.companhia = companhia;
+    }
+
+
+    public int getVaga_ocupada() {
+        return vaga_ocupada;
+    }
+
+    public void setVaga_ocupada(int vaga_ocupada) {
+        this.vaga_ocupada = vaga_ocupada;
     }
 }
 

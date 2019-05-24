@@ -25,6 +25,22 @@ public class VooController {
             this.V_assembler = V_assembler;
         }
 
+
+        // Lista todos os voos padrão
+
+        @GetMapping(value = "/voos",produces = "application/json; charset=UTF-8")
+        public Resources<Resource<Voo>> AllVoos(){
+
+            List<Resource<Voo>> voos = V_repository.findAll().stream()
+                    .map(voo -> new Resource<>(voo,linkTo(methodOn(VooController.class).one(voo.getId())).withSelfRel(),
+                            linkTo(methodOn(VooController.class).AllVoos()).withRel("Voos"))).collect(Collectors.toList());
+
+            return new Resources<>(voos,linkTo(methodOn(VooController.class).AllVoos()).withSelfRel());
+
+        }
+
+        //Lista todos os voos, de acordo com a origem ou destino
+/*
         @GetMapping(value = "/voos",produces = "application/json; charset=UTF-8")
         public Resources<Resource<Voo>> AllVoos(@RequestParam (value = "Origem",defaultValue = "All") String Origem,
                                                 @RequestParam (value = "Destino",defaultValue = "All") String Destino){
@@ -39,11 +55,14 @@ public class VooController {
                 voos = V_repository.findVoosByDestino(Destino);
             }
 
+
             Voo_resource = voos.stream().map(V_assembler::toResource).collect(Collectors.toList());
 
             return new Resources<>(Voo_resource,linkTo(methodOn(VooController.class).AllVoos(Origem,Destino)).withSelfRel());
 
         }
+
+*/
 
         @GetMapping(value = "/voos/{id_voo}",produces = "application/json; charset=UTF-8")
         public Resource<Voo> one(@PathVariable Long Voo_Id){
