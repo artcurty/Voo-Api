@@ -27,7 +27,7 @@ public class VooController {
 
 
         // Lista todos os voos padrão
-
+/*
         @GetMapping(value = "/voos",produces = "application/json; charset=UTF-8")
         public Resources<Resource<Voo>> AllVoos(){
 
@@ -39,30 +39,37 @@ public class VooController {
 
         }
 
-        //Lista todos os voos, de acordo com a origem ou destino
-/*
-        @GetMapping(value = "/voos",produces = "application/json; charset=UTF-8")
-        public Resources<Resource<Voo>> AllVoos(@RequestParam (value = "Origem",defaultValue = "All") String Origem,
-                                                @RequestParam (value = "Destino",defaultValue = "All") String Destino){
 
+ */
+        //Lista todos os voos, de acordo com a origem ou destino
+
+        @GetMapping(value = "/voos",produces = "application/json; charset=UTF-8")
+        public Resources<Resource<Voo>> AllVoos(@RequestParam (value = "Origem",defaultValue = "All") String Origem, @RequestParam (value = "Destino",defaultValue = "All") String Destino, @RequestParam (value = "numVagaLivre", defaultValue = "0")int numVagaLivre )
+        {
             List<Voo> voos;
+
             List<Resource<Voo>> Voo_resource;
 
-            if(Origem.equals("All")){
+                    if((Origem.equals("All")) && (Destino.equals("All"))){
 
-                voos = V_repository.findVoosByOrigem(Origem);
-            }else if(Destino.equals("All")){
-                voos = V_repository.findVoosByDestino(Destino);
-            }
+                        voos = V_repository.findVoosByNumVagaLivre(numVagaLivre);
+                    }
+                       else if (Origem.equals("All")){
 
+                        voos = V_repository.findVoosByDestinoAndNumVagaLivre(Destino, numVagaLivre);
+                    }
+                       else if (Destino.equals("All")){
+                        voos = V_repository.findVoosByOrigemAndNumVagaLivre(Origem,numVagaLivre);
+                    }
+                       else{
+                        voos = V_repository.findVoosByOrigemAndDestinoAndNumVagaLivre(Origem, Destino, numVagaLivre);
+                    }
 
-            Voo_resource = voos.stream().map(V_assembler::toResource).collect(Collectors.toList());
+             Voo_resource = voos.stream().map(V_assembler::toResource).collect(Collectors.toList());
 
-            return new Resources<>(Voo_resource,linkTo(methodOn(VooController.class).AllVoos(Origem,Destino)).withSelfRel());
+            return new Resources<>(Voo_resource,linkTo(methodOn(VooController.class).AllVoos(Origem,Destino,numVagaLivre)).withSelfRel());
 
         }
-
-*/
 
         @GetMapping(value = "/voos/{id_voo}",produces = "application/json; charset=UTF-8")
         public Resource<Voo> one(@PathVariable Long Voo_Id){

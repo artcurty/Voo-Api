@@ -4,6 +4,7 @@ plugins {
 }
 
 apply plugin: 'io.spring.dependency-management'
+apply plugin: 'idea'
 
 group = 'com.projects'
 version = '0.0.1-SNAPSHOT'
@@ -21,12 +22,19 @@ configurations {
 
 }
 
+idea {
+	module {
+		inheritOutputDirs = false
+		outputDir = file("$buildDir/classes/kotlin/main")
+	}
+}
+
 repositories {
 	mavenCentral()
 }
 dependencies {
 	implementation 'com.github.javafaker:javafaker:0.17.2'
-	compile("org.springframework.boot:spring-boot-devtools")
+	compile('org.springframework.boot:spring-boot-devtools')
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	compile('javax.xml.bind:jaxb-api:2.3.0')
 	compile('javax.activation:activation:1.1')

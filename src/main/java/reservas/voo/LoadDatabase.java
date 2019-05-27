@@ -87,7 +87,6 @@ public class LoadDatabase {
                             int time = getRandomIntegerBetweenRange(5, 23);
                             String hora_d_voo = time + ":00";
 
-
                             Voo voo_ida = new Voo(origem,valor_passagem,destino,"Monday",hora_d_voo,num_vagas,num_taken_seats,company);
                             Voo voo_volta = new Voo(origem,valor_passagem,destino, "Friday", hora_d_voo,num_vagas,num_taken_seats,company);
 
