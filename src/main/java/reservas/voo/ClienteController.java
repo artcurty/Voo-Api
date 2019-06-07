@@ -14,6 +14,8 @@ import java.util.stream.Collectors;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
+
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class ClienteController
 {
@@ -27,6 +29,7 @@ public class ClienteController
             this.Cl_Assembler = Cl_Assembler;
             this.V_repository = V_repository;
         }
+
 
         @GetMapping(value = "/clientes",produces = "application/json; charset=UTF-8")
         public Resources<Resource<Cliente>> AllClientes()

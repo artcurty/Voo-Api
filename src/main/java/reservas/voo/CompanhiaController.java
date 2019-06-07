@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.methodOn;
 
-
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class CompanhiaController {
 
