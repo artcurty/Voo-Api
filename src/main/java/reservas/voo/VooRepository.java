@@ -8,6 +8,9 @@ import java.util.List;
 
 interface VooRepository extends JpaRepository<Voo,Long>{
 
+    List<Voo> countVoosByOrigem(String origem);
+
+    List<Voo> countVoosByDestino(String destino);
 
     List<Voo> findVoosByCompanhia_Id(Long Companhia_Id);
 

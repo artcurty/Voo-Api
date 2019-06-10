@@ -26,7 +26,7 @@ public class VooController {
 
         // Lista todos os voos padrão
 /*
-        @GetMapping(value = "/voos",produces = "application/json; charset=UTF-8")
+        @GetMapping(value = "/vooos",produces = "application/json; charset=UTF-8")
         public Resources<Resource<Voo>> AllVoos(){
 
             List<Resource<Voo>> voos = V_repository.findAll().stream()
@@ -36,7 +36,6 @@ public class VooController {
             return new Resources<>(voos,linkTo(methodOn(VooController.class).AllVoos()).withSelfRel());
 
         }
-
 
  */
         //Lista todos os voos, de acordo com a origem ou destino
@@ -88,9 +87,5 @@ public class VooController {
             return new Resources<>(Voo_Resource, linkTo(methodOn(ClienteController.class).allClienteByVoo(Companhia_Id)).withSelfRel());
 
         }
-
-
-
-
 
 }
